@@ -178,108 +178,108 @@ void inicializa()
 
 void coord()
 {
-   // Look for keypress
+   // Busqueda de teclas introducidas, se guardarán en la variable tecla.
    tecla = miteclado.getKey();
    
-  // Initialize LCD and print
-  if (pantalla==0){
-      lcd.setCursor(3, 1);
-      lcd.print("Presione # para");
-      lcd.setCursor(5, 2);
-      lcd.print("comenzar");
-  if (tecla=='#'){
-    pantalla=1;
+
+  if (pantalla==0){      // Pantalla 0                                /////////////////////////
+      lcd.setCursor(3, 1);                                            //                     //
+      lcd.print("Presione # para");                                   //   Presione # para   //     
+      lcd.setCursor(5, 2);                                            //      comenzar       //
+      lcd.print("comenzar");                                          //                     // 
+  if (tecla=='#'){     // Pantalla 0 -> Pantalla 1.                   /////////////////////////
+    pantalla=1; 
     lcd.clear();
     }
   }
 
   if(pantalla==1){
-      lcd.setCursor(1, 1);
-      lcd.print(" How many plants");
-      lcd.setCursor(0, 2);
-      lcd.print("do you want to water ?");
-      lcd.setCursor(10, 3);
-      lcd.print("?");
+      lcd.setCursor(1, 1);                                            /////////////////////////
+      lcd.print(" How many plants");                                  //                     //
+      lcd.setCursor(0, 2);                                            //  How many plants    //
+      lcd.print("do you want to water ");                             //do you want to water //
+      lcd.setCursor(10, 3);                                           //         ?           //
+      lcd.print("?");                                                 /////////////////////////
       
-    switch ( tecla ){
+    switch ( tecla ){       //Casos de 1, 2 ó 3 vasos (coordenadas).
     
     case '1':   
-        vasos=1;//1 vaso
-        Coord_Less=8;       //Longitud del vector de coordenadas + 1
-        lcd.clear();
-        pantalla=2;
+        vasos=1;            //1 vaso
+        Coord_Less=8;       //Variable que modifica la longitud final del vector de coordenadas, en este caso restará 8 dígitos.
+        lcd.clear();        
+        pantalla=2;         // Pantalla 1 -> Pantalla 2.
         break;
        
     case '2':   
-        vasos=2;//2vasos
-        Coord_Less=4;       //Longitud del vector de coordenadas + 1
+        vasos=2;            //2vasos
+        Coord_Less=4;       //Variable que modifica la longitud final del vector de coordenadas, en este caso restará 4 dígitos.
         lcd.clear();
-        pantalla=3;
+        pantalla=3;         // Pantalla 1 -> Pantalla 3.
         break;
         
     case '3': 
-        vasos=3; //3vasos
-        Coord_Less=0;      //Longitud del vector de coordenadas + 1
+        vasos=3;           //3vasos
+        Coord_Less=0;      //Variable que modifica la longitud final del vector de coordenadas, en este caso no restará dígitos.
         lcd.clear();
-        pantalla=4;
+        pantalla=4;        // Pantalla 1 -> Pantalla 4.
         break;
         
     }  
   }
         
-  if(pantalla>=2){
-      
-      lcd.setCursor(0, 0);
-      lcd.print("Set Coordinates:");
-      lcd.setCursor(0, 1);
-      lcd.print("Coordinates 1:");
-      
-      if(pantalla>2){
-      lcd.setCursor(0, 2);
-      lcd.print("Coordinates 2:");
+  if(pantalla>=2){        // Pantalla 2: caso de 1 solo vaso.    //
+                                                                 //
+      lcd.setCursor(0, 0);                                       //
+      lcd.print("Set Coordinates:");                             //
+      lcd.setCursor(0, 1);                                       //
+      lcd.print("Coordinates 1:");    // 1 vaso -> 1 coordenada. //
+                                                             
+      if(pantalla>2){     // si pantalla=3: añade la linea para  // 
+      lcd.setCursor(0, 2);// pedir las coordenadas del 2do vaso. //  
+      lcd.print("Coordinates 2:");  // 2 vasos -> 2 coordenadas. //
       }
-      if(pantalla>3){
-      lcd.setCursor(0, 3);
-      lcd.print("Coordinates 3:");
+      if(pantalla>3){     // si pantalla=4: añade la linea para  // 
+      lcd.setCursor(0, 3);// pedir las coordenadas del 3er vaso. //
+      lcd.print("Coordinates 3:");  // 3 vasos -> 3 coordenadas. //
       }
-      lcd.setCursor(0, linea);
-
-      if (tecla=='*')
-      {
-      columna++;
-      }
-      
-      if (tecla=='#')
-      {
-      columna=15;
-      linea++;
-      }
+      lcd.setCursor(0, linea);  // Formato de visualización de las coordenadas que vamos introduciendo //
+                                                                                                       //
+      if (tecla=='*')           // tecla * equivale a espacio (' ')                                    //   
+      {                                                                                                //
+      columna++;                                                                                       //
+      }                                                                                                //
+                                                                                                       //      
+      if (tecla=='#')           // tecla # equivale a intro (salto de linea)                           //
+      {                                                                                                //
+      columna=15;                                                                                      //
+      linea++;                                                                                         //
+      }                                                                                        //////////
     
   if (tecla != '#' && tecla != '*' && tecla != NO_KEY){
-   // Enter keypress into array and increment counter
-    int numero= tecla - 48;
-    Data[data_count] = numero;
-    lcd.setCursor(columna, linea);
-    if(data_count>0){
-    lcd.print(Data[data_count]);
-    columna++;
-    }
+   // Introducimos las coordenadas que van conformando el vector Data.
+    int numero= tecla - 48;              // Conversión de caracter a numero entero (ascii)
+    Data[data_count] = numero;           // numero -> al vector
+    lcd.setCursor(columna, linea);       ////   Este proceso se ejecutara por cada pulsación de tecla 
+    if(data_count>0){                    ////   siempre que cumpla las condiciones.
+    lcd.print(Data[data_count]);         //
+    columna++;                           //
+    }                             
     data_count++;
   }
   
 }
-     // Si hemos alcanzado el limite de coordenadas estipuladas
+    // Limite de introducción de coordenadas:
      
-  if (data_count == Coord_Length - Coord_Less ) {
-    lcd.clear();
+  if (data_count == Coord_Length - Coord_Less ) {     //Cuando se haya rellenado todas las coordenadas
+    lcd.clear();                                      //Paramos la introducción 
     lcd.setCursor(0, 0);
     lcd.print("Resultado:");
     lcd.setCursor(0, 2);
-    for(int y=0;y<Coord_Length - Coord_Less -1 ;y++){
-    Result[y]=Data[y+1];
+    for(int y=0;y<Coord_Length - Coord_Less -1 ;y++){ //Conformamos el vector resultado que contiene
+    Result[y]=Data[y+1];                              //Las coordenadas en el formato adecuado
     lcd.print(Result[y]);
     lcd.setCursor(y+1, 2);
-    Estados=1;
+    Estados=1;                                        //Empezamos el proceso de máquina de estados.
     }
     lcd.clear();
     }
